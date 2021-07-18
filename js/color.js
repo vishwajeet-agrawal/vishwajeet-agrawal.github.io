@@ -19,6 +19,7 @@ function nextColor() {
     document.body.style.backgroundColor = colors[ci];
 }
 function nextColorClick() {
+    document.getElementById("main").style.display = "none";
     i = Math.floor(Math.random()*3);
     document.body.style.backgroundColor = colors2[i];
     setTimeout(function(){
@@ -42,6 +43,7 @@ document.querySelector('body').onkeypress = function(event){
     }
     else if (event.key==' ' && started==1){
         // show results
+        document.getElementById("main").style.display = "block";
         started = 0;
         document.body.style.backgroundColor = white;
         results.style.display = "block";
