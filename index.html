@@ -2,10 +2,24 @@
 <html>
 <head>
 	
+    <!-- <link rel="stylesheet" href="style.css"> -->
 </head>
-
+<!-- <audio id="sound">   
+    <source src="assets/censor-beep.wav" />   
+    </audio>   -->
 <body>
-    <button id="button">Start</button>
+    <button id="start" onclick="startkey()">Start</button>
+    <p id="clickinfo"> Tap anywhere on screen to get the next colour.</p>
+    <p id="keyinfo">
+        Blindfold yourself and then Press SPACE to start the experiment.
+        As you spress SPACE, a colour will be displayed on the screen.
+        Press '1' for red, '2' for green and '3' for blue. As you press one of these keys, the response will be recorded, and 
+        the next colour will be displayed.
+    </p>
+    
+    <button id="show" onclick="show()">Show</button>
+    <p id="result"></p>
+    </div>
     </body>
 <script src="js/color.js"></script>
 </html>
