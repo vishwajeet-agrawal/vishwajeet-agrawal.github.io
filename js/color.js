@@ -6,8 +6,8 @@ const colors2 = ["rgb(160,0,0)", "rgb(0,160,0)", "rgb(0,0,160)"];
 
 var ci = -1;
 var started = 0;
-var iskey = false;
-var isclick = true;
+// var iskey = false;
+// var isclick = true;
 const white = "rgb(255,255,255)"
 const startb = document.getElementById("start");
 const keyinfo = document.getElementById("keyinfo");
@@ -31,22 +31,32 @@ function nextColorClick() {
     }, 200)
 }
 document.querySelector('body').onclick = function(){
-    if (isclick){
-        nextColorClick();
-    }
+    // if (isclick){
+    nextColorClick();
+    // }
 }
 document.querySelector('body').onkeypress = function(event){
-    if (iskey){
-        if (event.key == ' '){
+    
+        if (event.key == ' ' && started==0){
             started = 1;
             correct = 0;
             total = 0;
+            // isclick = true;
             result.textContent = "";
-            showb.style.display = "block";
             keyinfo.style.display = "none";  
-               
+            clickinfo.style.display = "none";
+            setTimeout(nextColor, 500);
+
         }
-        if (started == 1){
+        else if (event.key==' ' && started==1){
+            started = 0;
+            document.body.style.backgroundColor = white;
+            keyinfo.style.display = "block";
+            clickinfo.style.display = "block";
+            result.textContent = "Correct: "+ correct.toString() + ", Total: " + total.toString() + ", Accuracy: " + (correct/total).toFixed(2).toString();
+            // isclick = true;
+        }
+        else if (started == 1){
             if (event.key == '1'){
                 if (ci==0){
                     correct += 1;
@@ -70,28 +80,7 @@ document.querySelector('body').onkeypress = function(event){
             }
             setTimeout(nextColor, 500);
         }
-    }
+    
 }
 
 
-function show(){
-    started = 0;
-    showb.style.display = "none";
-    result.textContent = "Correct: "+ correct.toString() + ", Total: " + total.toString() + ", Accuracy: " + (correct/total).toFixed(2).toString();
-    startb.style.display = "block";
-    iskey = false;
-    isclick = true;
-}
-
-function startkey(){
-    iskey = true;
-    isclick = false;
-    correct = 0;
-    total = 0;
-    document.body.style.backgroundColor = white;
-    startb.style.display = "none";
-    showb.style.display = "none";
-    keyinfo.style.display = "block";
-    clickinfo.style.display = "none";
-    result.textContent = "";
-}
