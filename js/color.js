@@ -13,8 +13,9 @@ const keyinfo = document.getElementById("keyinfo");
 const clickinfo = document.getElementById("clickinfo");
 const result = document.getElementById("result");
 const results = document.getElementById("results");
-
+const exp = document.getElementById("exp");
 function nextColor() {
+    document.getElementById("trialnum").textContent = (total+1).toString();
     ci = Math.floor(Math.random()*3);
     document.body.style.backgroundColor = colors[ci];
 }
@@ -38,6 +39,7 @@ document.querySelector('body').onkeypress = function(event){
         results.style.display = "none";
         keyinfo.style.display = "none";  
         clickinfo.style.display = "none";
+        exp.style.display = "block";
         setTimeout(nextColor, 500);
 
     }
@@ -49,6 +51,7 @@ document.querySelector('body').onkeypress = function(event){
         results.style.display = "block";
         keyinfo.style.display = "block";
         clickinfo.style.display = "block";
+        exp.style.display = "none";
         document.getElementById("true").textContent = T;
         document.getElementById("pred").textContent = P;
         result.textContent = "Correct: "+ correct.toString() + ", Total: " + total.toString() + ", Accuracy: " + (correct/total).toFixed(2).toString();
@@ -76,8 +79,10 @@ document.querySelector('body').onkeypress = function(event){
             document.body.style.backgroundColor = colors1[i];
             P = P.concat(" ").concat(colorcodes[i]);
             T = T.concat(" ").concat(colorcodes[ci]);
+            setTimeout(nextColor, 500);
         }
         
+
         
         // document.body.style.backgroundColor = colors1[0]; 
         // if (event.key == '1'){
@@ -104,7 +109,6 @@ document.querySelector('body').onkeypress = function(event){
         //     total += 1;
         //     document.body.style.backgroundColor = colors1[2]; 
         // }
-        setTimeout(nextColor, 500);
     }  
 }
 
