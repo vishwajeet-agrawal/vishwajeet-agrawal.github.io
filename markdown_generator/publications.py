@@ -63,10 +63,10 @@ def html_escape(text):
 
 import os
 for row, item in publications.iterrows():
-    
+    print(item)
     md_filename = str(item.pub_date) + "-" + item.url_slug + ".md"
     html_filename = str(item.pub_date) + "-" + item.url_slug
-    year = item.pub_date[:4]
+    year = item.pub_date
     
     ## YAML variables
     
@@ -76,17 +76,16 @@ for row, item in publications.iterrows():
     
     md += """\npermalink: /publication/""" + html_filename
     
-    if len(str(item.excerpt)) > 5:
-        md += "\nexcerpt: '" + html_escape(item.excerpt) + "'"
+    # if len(str(item.excerpt)) > 5:
+    #     md += "\nexcerpt: '" + html_escape(item.excerpt) + "'"
     
     md += "\ndate: " + str(item.pub_date) 
     
-    md += "\nvenue: '" + html_escape(item.venue) + "'"
     
     if len(str(item.paper_url)) > 5:
         md += "\npaperurl: '" + item.paper_url + "'"
     
-    md += "\ncitation: '" + html_escape(item.citation) + "'"
+    # md += "\ncitation: '" + html_escape(item.citation) + "'"
     
     md += "\n---"
     
@@ -95,10 +94,10 @@ for row, item in publications.iterrows():
     if len(str(item.paper_url)) > 5:
         md += "\n\n<a href='" + item.paper_url + "'>Download paper here</a>\n" 
         
-    if len(str(item.excerpt)) > 5:
-        md += "\n" + html_escape(item.excerpt) + "\n"
+    # if len(str(item.excerpt)) > 5:
+    #     md += "\n" + html_escape(item.excerpt) + "\n"
         
-    md += "\nRecommended citation: " + item.citation
+    # md += "\nRecommended citation: " + item.citation
     
     md_filename = os.path.basename(md_filename)
        
