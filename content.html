@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Content</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"> </script>
+
+    <script type="text/javascript">
+
+        function decryptContent(encryptedContent, passcode) {
+            // Decode the base64 encoded content
+            var encryptedData = CryptoJS.enc.Base64.parse(encryptedContent);
+
+            // Extract the salt, IV, and ciphertext
+            var salt = CryptoJS.lib.WordArray.create(encryptedData.words.slice(0, 4));
+            var iv = CryptoJS.lib.WordArray.create(encryptedData.words.slice(4, 8));
+            var ciphertext = CryptoJS.lib.WordArray.create(encryptedData.words.slice(8));
+
+            // Derive the key using PBKDF2
+            var key = CryptoJS.PBKDF2(passcode, salt, { keySize: 256 / 32, iterations: 1000 });
+
+            // Decrypt the ciphertext
+            var decrypted = CryptoJS.AES.decrypt({ ciphertext: ciphertext }, key, { iv: iv, padding: CryptoJS.pad.Pkcs7 });
+            return decrypted.toString(CryptoJS.enc.Utf8);
+        }
+
+        async function checkPassword() {
+            var passcode = document.getElementById("passcode").value;
+            var hashedPasscode = CryptoJS.SHA256(passcode).toString();
+            var correctHash = "a6b3d13c1c8c5513fa6cbd8e3b5c922931652e8fa6fa76457633f25d6d6378ca"; // 
+            
+
+            // end of the encrypted content
+            if (hashedPasscode === correctHash) {
+                const response = await fetch('encrypted_content.txt');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                const encryptedContent = await response.text();
+                var decryptedContent = decryptContent(encryptedContent, passcode);
+
+                document.getElementById("protectedContent").innerHTML = decryptedContent;
+                document.getElementById("protectedContent").style.display = "block";
+                document.getElementById("loginForm").style.display = "none";
+                
+                if (typeof MathJax !== 'undefined') {
+                    MathJax.typesetPromise();
+                } else {
+                    console.error('MathJax is not loaded on this page.');
+                }
+            } else {
+                alert("Incorrect passcode. Please try again.");
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("passcode").addEventListener("keydown", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault(); 
+                    checkPassword(); 
+                }
+            });
+        });
+
+    </script>
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0 auto;
+        padding:20px;
+      
+        background-color: #f0f0f0; /* Optional: Background color */
+        max-width: 1000px;
+        justify-content: center;
+      }
+    
+      /* Ensure word wrapping */
+    
+      .content {
+        max-width: 400px; /* Set a finite width for the content */
+        padding: 20px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+    
+      /* Highlight links */
+      a {
+        color: blue;
+        text-decoration: underline;
+      }
+    
+      /* Optional: Different color when hovering over links */
+      a:hover {
+        color: darkblue;
+      }
+    
+      /* Ensure tables have borders */
+      table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 8px;
+      }
+      </style>
+</head>
+<body>
+    <div id="loginForm">
+        <h2>Enter Passcode</h2>
+        <input type="password" id="passcode" />
+        <button onclick="checkPassword()">Submit</button>
+    </div>
+    <div id="protectedContent" style="display:none;"></div>
+</body>
+</html>
